@@ -21,4 +21,4 @@ ai = [
 ]
 
 [tool.vercel]
-entrypoint = "run_dashboard:app"
+entrypoint = "api/index.py"

@@ -10,15 +10,26 @@ Provides:
 from __future__ import annotations
 
 import os
+import sys
+
+# Ensure project root is in sys.path
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 import glob
 import json
 import time
-import cv2
 import csv
 import io
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
+
+try:
+    import cv2
+except Exception:
+    cv2 = None
 
 from fastapi import FastAPI, Response, Query, HTTPException
 from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
@@ -69,11 +80,14 @@ def format_duration(seconds: float) -> str:
 
 # ── Static Files & Dashboard Home ──────────────────────────────────────────────
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
-os.makedirs(STATIC_DIR, exist_ok=True)
-os.makedirs(os.path.join(STATIC_DIR, "css"), exist_ok=True)
-os.makedirs(os.path.join(STATIC_DIR, "js"), exist_ok=True)
+try:
+    os.makedirs(STATIC_DIR, exist_ok=True)
+except Exception:
+    pass
 
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+if os.path.isdir(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -713,15 +727,19 @@ def mjpeg_generator(cam_id: Optional[str] = None):
 
         if frame_bytes is None:
             # Generate a clean dark fallback frame if pipeline has not sent frames yet
-            dummy = cv2.imread(os.path.join(os.path.dirname(__file__), "..", "captures", "placeholder.jpg"))
-            if dummy is None:
-                dummy = 25 * (cv2.imread(os.path.join(STATIC_DIR, "placeholder.jpg")) if os.path.exists(os.path.join(STATIC_DIR, "placeholder.jpg")) else 0)
-            if dummy is None or not isinstance(dummy, cv2.Mat):
-                import numpy as np
-                dummy = np.zeros((360, 640, 3), dtype=np.uint8)
-                cv2.putText(dummy, "Connecting to CCTV Stream...", (140, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (180, 180, 180), 2)
-            _, encoded = cv2.imencode(".jpg", dummy, [cv2.IMWRITE_JPEG_QUALITY, 70])
-            frame_bytes = encoded.tobytes()
+            if cv2 is not None:
+                dummy = cv2.imread(os.path.join(os.path.dirname(__file__), "..", "captures", "placeholder.jpg"))
+                if dummy is None:
+                    dummy = 25 * (cv2.imread(os.path.join(STATIC_DIR, "placeholder.jpg")) if os.path.exists(os.path.join(STATIC_DIR, "placeholder.jpg")) else 0)
+                if dummy is None or not isinstance(dummy, getattr(cv2, "Mat", object)):
+                    import numpy as np
+                    dummy = np.zeros((360, 640, 3), dtype=np.uint8)
+                    cv2.putText(dummy, "Connecting to CCTV Stream...", (140, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (180, 180, 180), 2)
+                _, encoded = cv2.imencode(".jpg", dummy, [cv2.IMWRITE_JPEG_QUALITY, 70])
+                frame_bytes = encoded.tobytes()
+            else:
+                frame_bytes = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x01\x00H\x00H\x00\x00\xff\xdb\x00C\x00\x08\x06\x06\x07\x06\x05\x08\x07\x07\x07\t\t\x08\n\x0c\x14\r\x0c\x0b\x0b\x0c\x19\x12\x13\x0f\x14\x1d\x1a\x1f\x1e\x1d\x1a\x1c\x1c $.' \",#\x1c\x1c(7),01444\x1f'9=82<.342\xff\xc0\x00\x0b\x08\x00\x01\x00\x01\x01\x01\x11\x00\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xda\x00\x08\x01\x01\x00\x00?\x00\xbf\x00\xff\xd9"
+
 
         yield (
             b"--frame\r\n"
