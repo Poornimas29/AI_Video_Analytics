@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCTV Analytics — Employee Attendance & Productivity Dashboard</title>
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-logo">📊</div>
+      <div class="brand-text">
+        <h1>ATTENDANCE & ANALYTICS DASHBOARD</h1>
+        <p>AI-Powered Touchless Check-in & Continuous Tracking</p>
+      </div>
+    </div>
+    <div class="header-status">
+      <div class="badge badge-live">
+        <span class="dot-pulse"></span>
+        <span>AI PIPELINE ACTIVE</span>
+      </div>
+      <button class="btn-ctrl" onclick="window.open('/video_feed/grid', '_blank')" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: var(--primary);">
+        <span>📹</span>
+        <span>Pop-out Camera Stream</span>
+      </button>
+      <div class="clock" id="liveClock">--:--:-- UTC</div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- KPI Metrics Row -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Active Workers on Site</div>
+        <div class="kpi-value" id="kpiActiveStaff" style="color: #38BDF8;">0</div>
+        <div class="kpi-sub">Currently detected inside premises</div>
+        <div class="kpi-icon">👥</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Check-Ins Today</div>
+        <div class="kpi-value" id="kpiTotalCheckins" style="color: #34D399;">0</div>
+        <div class="kpi-sub">Recorded check-in events</div>
+        <div class="kpi-icon">⏱️</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Staff Present Today</div>
+        <div class="kpi-value" id="kpiTotalStaffPresent" style="color: #FBBF24;">0</div>
+        <div class="kpi-sub">Distinct employees recorded on site</div>
+        <div class="kpi-icon">👤</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Mobile Usage Alerts</div>
+        <div class="kpi-value" id="kpiPhoneViolations" style="color: #F87171;">0</div>
+        <div class="kpi-sub">Confirmed phone usage incidents</div>
+        <div class="kpi-icon">📱</div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-bar">
+      <button class="tab-btn active" data-target="tabTimeline">📅 Daily Attendance Timeline</button>
+      <button class="tab-btn" data-target="tabPresence">🟢 Live Presence Monitor</button>
+      <button class="tab-btn" data-target="tabStaff">👥 Enrolled Staff Registry</button>
+      <button class="tab-btn" data-target="tabPunches">📋 Employee Punch Cards</button>
+    </nav>
+
+    <!-- TAB 1: Daily Attendance Timeline (Primary View) -->
+    <section id="tabTimeline" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>📅</span>
+            <span>Individual Employee Attendance & Working Hours</span>
+          </div>
+          <div class="filter-bar" style="margin-bottom: 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+            <div class="search-box-group" style="position: relative;">
+              <input type="text" id="employeeSearchInput" placeholder="🔍 Search Employee Name or ID..." class="search-input" style="padding: 7px 12px; border-radius: 6px; border: 1px solid var(--border, #374151); background: var(--card-bg, #1f2937); color: var(--text-main, #f9fafb); font-size: 13px; min-width: 220px; outline: none;">
+            </div>
+            <div class="date-picker-group" style="display: flex; align-items: center; gap: 6px;">
+              <label for="historyDateInput" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">DATE:</label>
+              <input type="date" id="historyDateInput" class="date-input">
+              <button id="btnAllDates" class="btn-audit" style="padding: 6px 10px; font-size: 12px;" title="View all historical records across all dates">All Dates</button>
+            </div>
+            <button id="btnExportCsv" class="btn-export">
+              <span>📥</span>
+              <span>Export CSV Report</span>
+            </button>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-container">
+            <table class="custom-table" id="historyTable">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Employee</th>
+                  <th style="width: 14%;">Date</th>
+                  <th style="width: 14%;">First Entry</th>
+                  <th style="width: 14%;">Last Exit</th>
+                  <th style="width: 30%; text-align: right;">Employee Working Hours</th>
+                </tr>
+              </thead>
+              <tbody id="historyTbody">
+                <tr><td colspan="5" style="text-align:center; color: var(--text-dim); padding: 36px;">Loading attendance timeline...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Live Presence Monitor -->
+    <section id="tabPresence" class="tab-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>🟢</span>
+            <span>Live Employees Currently Detected on Premises</span>
+          </div>
+          <span class="badge" id="kpiUptime">System Uptime: 0h 0m</span>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Employee Name & ID</th>
+                  <th>Entry Time</th>
+                  <th>Current Active Duration</th>
+                  <th>Workplace Status</th>
+                </tr>
+              </thead>
+              <tbody id="liveAttendanceTbody">
+                <tr><td colspan="4" style="text-align:center; color: var(--text-dim); padding: 30px;">Connecting to real-time session tracking engine...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Enrolled Staff Directory (Scalable Multi-View Registry) -->
+    <section id="tabStaff" class="tab-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>👥</span>
+            <span>Enrolled Employee Profiles & Biometrics</span>
+          </div>
+          <!-- View Switcher & Action Buttons -->
+          <div class="staff-header-controls">
+            <div class="view-toggle-group">
+              <button id="staffViewCardsBtn" class="btn-toggle active" title="Cards Grid View">
+                <span>🔲</span>
+                <span>Grid</span>
+              </button>
+              <button id="staffViewTableBtn" class="btn-toggle" title="Compact Table / List View">
+                <span>📋</span>
+                <span>Table</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter, Search & Sort Toolbar -->
+        <div class="staff-toolbar">
+          <div class="staff-search-wrapper">
+            <span class="search-icon-prefix">🔍</span>
+            <input type="text" id="staffSearchInput" placeholder="Search employee name or ID..." class="staff-search-bar">
+          </div>
+          <div class="staff-filter-group">
+            <select id="staffFilterStatus" class="custom-select">
+              <option value="all">All Employees</option>
+              <option value="onsite">🟢 On-Site Now</option>
+              <option value="enrolled">📸 Photos Enrolled</option>
+              <option value="missing">⚠️ Missing Photos</option>
+            </select>
+            <select id="staffSortSelect" class="custom-select">
+              <option value="name-asc">Sort: Name (A → Z)</option>
+              <option value="name-desc">Sort: Name (Z → A)</option>
+              <option value="id-asc">Sort: ID (Asc)</option>
+              <option value="photos-desc">Sort: Photos (High → Low)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-body" style="padding: 0;">
+          <!-- View 1: Card Grid View -->
+          <div id="staffGridViewWrapper" class="staff-view-container" style="padding: 20px;">
+            <div class="staff-grid" id="staffGrid">
+              <div style="color: var(--text-dim);">Loading enrolled staff profiles...</div>
+            </div>
+          </div>
+
+          <!-- View 2: Compact Dense Table View -->
+          <div id="staffTableViewWrapper" class="table-container staff-view-container" style="display: none;">
+            <table class="custom-table" id="staffTable">
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Employee</th>
+                  <th style="width: 18%;">Employee ID</th>
+                  <th style="width: 18%;">Biometric Enrollment</th>
+                  <th style="width: 16%;">Presence</th>
+                  <th style="width: 16%; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableTbody">
+                <tr><td colspan="5" style="text-align:center; color: var(--text-dim); padding: 30px;">Loading staff table...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Staff Pagination Bar -->
+          <div class="staff-pagination-bar" id="staffPaginationBar">
+            <div class="pagination-info" id="staffPaginationInfo">
+              Showing 0 of 0 employees
+            </div>
+            <div class="pagination-controls">
+              <div class="page-size-selector">
+                <span style="font-size: 12px; color: var(--text-muted);">Per page:</span>
+                <select id="staffPageSizeSelect" class="date-input" style="padding: 4px 8px; font-size: 12px;">
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="48">48</option>
+                  <option value="all">All</option>
+                </select>
+              </div>
+              <div class="page-nav-btns" id="staffPageNavBtns"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Employee Attendance Punch Inspector View -->
+    <section id="tabPunches" class="tab-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>📋</span>
+            <span>Employee Daily Punch & Biometric Attendance Inspector</span>
+          </div>
+          <div class="filter-bar" style="margin-bottom: 0;">
+            <select id="punchEmployeeSelect" class="date-input" style="min-width: 200px;">
+              <option value="">Select Employee...</option>
+            </select>
+            <input type="date" id="punchDateInput" class="date-input">
+          </div>
+        </div>
+        <div class="card-body" style="padding: 24px;">
+          <div id="punchTabContainer" class="punch-view-wrapper">
+            <div style="text-align:center; color: var(--text-muted); padding: 40px;">Select an employee to view their attendance punch timeline.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Employee Daily Attendance Punch Modal Dialog (Exact Client UI) ────── -->
+  <div id="attendanceModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-container">
+      <div class="punch-card-panel">
+        
+        <!-- Modal Header -->
+        <div class="punch-header">
+          <div class="punch-title-group">
+            <h2 id="modalDateHeading" class="punch-date-title">Tue, 18 Aug 2026</h2>
+          </div>
+          <div class="punch-actions">
+            <button class="btn-audit" onclick="showAuditToast()">Audit History</button>
+            <button class="btn-close-modal" onclick="closeAttendanceModal()" title="Close">✕</button>
+          </div>
+        </div>
+
+        <!-- Employee Info Subtitle -->
+        <div class="punch-employee-banner">
+          <div class="emp-meta" style="display: flex; align-items: center; gap: 12px;">
+            <span id="modalEmpAvatar">👤</span>
+            <div>
+              <strong id="modalEmpName" style="font-size: 15px; color: var(--text-main);">Arun Prakash</strong>
+              <span id="modalEmpId" style="font-size: 12px; color: var(--primary); font-family: var(--font-mono); margin-left: 6px;">(EMP001)</span>
+            </div>
+          </div>
+          <div class="emp-total-badge">
+            Total Working: <strong id="modalTotalHours" style="color: var(--success);">0h 00m</strong>
+          </div>
+        </div>
+
+        <!-- Punch Cards Stack -->
+        <div class="punch-cards-stack" id="modalPunchCardsList">
+          <!-- Dynamically Injected Punch Cards -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+{
+  "employee_id": "EMP005",
+  "employee_name": "Rajesh",
+  "date": "2026-07-27",
+  "presence_status": "VIDEO_ENDED",
+  "first_checkin": "07:03:27",
+  "last_checkout": "07:35:44",
+  "entrance_camera_id": "CAM002",
+  "exit_camera_id": "CAM002",
+  "entry_time": "2026-07-27T07:03:27.360000",
+  "exit_time": "2026-07-27T07:35:44.960000",
+  "total_shop_duration": "00h 32m 17s",
+  "working_hours": 0.5382,
+  "working_duration_seconds": 1937.6,
+  "phone_use_duration_seconds": 0.0,
+  "phone_use_count": 0,
+  "productivity_score": 100.0,
+  "recognition_confidence": 48.5,
+  "total_visits_count": 1,
+  "entries_and_exits": [
+    {
+      "visit_number": 1,
+      "entrance_camera": "CAM002",
+      "entry_time": "07:03:27",
+      "exit_camera": "CAM002",
+      "exit_time": "Video Ended",
+      "exit_type": "VIDEO_ENDED",
+      "status": "VIDEO_ENDED",
+      "duration": "00h 32m 17s",
+      "duration_seconds": 1937.6
+    }
+  ],
+  "events": [
+    {
+      "event_type": "CAMERA_TRANSITION",
+      "camera_id": "CAM002",
+      "entry_time": "2026-07-27T07:01:10.560000",
+      "exit_time": "2026-07-27T07:23:27.360000"
+    },
+    {
+      "event_type": "CHECK_IN",
+      "camera_id": "CAM002",
+      "timestamp": "2026-07-27T07:03:27.360000",
+      "time": "07:03:27"
+    },
+    {
+      "event_type": "CAMERA_TRANSITION",
+      "camera_id": "CAM002",
+      "entry_time": "2026-07-27T07:03:27.360000",
+      "exit_time": "2026-07-27T07:01:10.560000"
+    },
+    {
+      "event_type": "CAMERA_TRANSITION",
+      "camera_id": "CAM004",
+      "entry_time": "2026-07-27T07:05:41.360000",
+      "exit_time": "2026-07-27T07:23:27.360000"
+    },
+    {
+      "event_type": "CHECK_IN",
+      "camera_id": "CAM002",
+      "timestamp": "2026-07-27T07:13:28.560000",
+      "time": "07:13:28"
+    },
+    {
+      "event_type": "CAMERA_TRANSITION",
+      "camera_id": "CAM002",
+      "entry_time": "2026-07-27T07:13:28.560000",
+      "exit_time": "2026-07-27T07:35:44.960000"
+    },
+    {
+      "event_type": "VIDEO_ENDED",
+      "camera_id": "CAM002",
+      "timestamp": "2026-07-27T07:23:27.360000",
+      "time": "07:23:27"
+    },
+    {
+      "event_type": "VIDEO_ENDED",
+      "camera_id": "CAM002",
+      "timestamp": "2026-07-27T07:35:44.960000",
+      "time": "07:35:44"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "SESS_EMP005_20260727_070327",
+      "first_checkin": "07:03:27",
+      "last_checkout": "Video Ended",
+      "entrance_camera_id": "CAM002",
+      "exit_camera_id": "CAM002",
+      "entry_time": "2026-07-27T07:03:27.360000",
+      "exit_time": "2026-07-27T07:23:27.360000",
+      "exit_type": "VIDEO_ENDED",
+      "duration": "00h 20m 00s",
+      "duration_seconds": 1200.0,
+      "phone_use_duration_seconds": 0.0,
+      "phone_use_count": 0,
+      "productivity_score": 100.0,
+      "recognition_confidence": 56.3,
+      "events": [
+        {
+          "event_type": "CHECK_IN",
+          "camera_id": "CAM002",
+          "timestamp": "2026-07-27T07:03:27.360000",
+          "time": "07:03:27"
+        },
+        {
+          "event_type": "CAMERA_TRANSITION",
+          "camera_id": "CAM002",
+          "entry_time": "2026-07-27T07:03:27.360000",
+          "exit_time": "2026-07-27T07:01:10.560000"
+        },
+        {
+          "event_type": "CAMERA_TRANSITION",
+          "camera_id": "CAM004",
+          "entry_time": "2026-07-27T07:05:41.360000",
+          "exit_time": "2026-07-27T07:23:27.360000"
+        },
+        {
+          "event_type": "CAMERA_TRANSITION",
+          "camera_id": "CAM002",
+          "entry_time": "2026-07-27T07:01:10.560000",
+          "exit_time": "2026-07-27T07:23:27.360000"
+        },
+        {
+          "event_type": "VIDEO_ENDED",
+          "camera_id": "CAM002",
+          "timestamp": "2026-07-27T07:23:27.360000",
+          "time": "07:23:27"
+        }
+      ],
+      "camera_history": [
+        {
+          "camera_id": "CAM002",
+          "entry_time": "2026-07-27T07:03:27.360000",
+          "exit_time": "2026-07-27T07:01:10.560000"
+        },
+        {
+          "camera_id": "CAM004",
+          "entry_time": "2026-07-27T07:05:41.360000",
+          "exit_time": "2026-07-27T07:23:27.360000"
+        },
+        {
+          "camera_id": "CAM002",
+          "entry_time": "2026-07-27T07:01:10.560000",
+          "exit_time": "2026-07-27T07:23:27.360000"
+        }
+      ]
+    },
+    {
+      "session_id": "SESS_EMP005_20260727_071328",
+      "first_checkin": "07:13:28",
+      "last_checkout": "Video Ended",
+      "entrance_camera_id": "CAM002",
+      "exit_camera_id": "CAM002",
+      "entry_time": "2026-07-27T07:13:28.560000",
+      "exit_time": "2026-07-27T07:35:44.960000",
+      "exit_type": "VIDEO_ENDED",
+      "duration": "00h 22m 16s",
+      "duration_seconds": 1336.4,
+      "phone_use_duration_seconds": 0.0,
+      "phone_use_count": 0,
+      "productivity_score": 100.0,
+      "recognition_confidence": 48.5,
+      "events": [
+        {
+          "event_type": "CHECK_IN",
+          "camera_id": "CAM002",
+          "timestamp": "2026-07-27T07:13:28.560000",
+          "time": "07:13:28"
+        },
+        {
+          "event_type": "CAMERA_TRANSITION",
+          "camera_id": "CAM002",
+          "entry_time": "2026-07-27T07:13:28.560000",
+          "exit_time": "2026-07-27T07:35:44.960000"
+        },
+        {
+          "event_type": "VIDEO_ENDED",
+          "camera_id": "CAM002",
+          "timestamp": "2026-07-27T07:35:44.960000",
+          "time": "07:35:44"
+        }
+      ],
+      "camera_history": [
+        {
+          "camera_id": "CAM002",
+          "entry_time": "2026-07-27T07:13:28.560000",
+          "exit_time": "2026-07-27T07:35:44.960000"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "date": "20260727",
+  "generated_at": "2026-08-20T16:00:01",
+  "known_employees": [
+    {
+      "employee_id": "EMP005",
+      "employee_name": "Rajesh",
+      "total_working_hours": 0.7046,
+      "total_mobile_usage_hours": 0.0,
+      "total_phone_use_count": 0,
+      "stream_stops": 0,
+      "stops": [
+        {
+          "stop_number": 1,
+          "entry_time": "07:03:27",
+          "exit_time": "07:35:44",
+          "working_hours": 0.7046,
+          "mobile_usage_hours": 0.0
+        }
+      ]
+    },
+    {
+      "employee_id": "EMP",
+      "employee_name": "Senthil",
+      "total_working_hours": 3.2293,
+      "total_mobile_usage_hours": 0.0,
+      "total_phone_use_count": 0,
+      "stream_stops": 0,
+      "stops": [
+        {
+          "stop_number": 1,
+          "entry_time": "07:07:21",
+          "exit_time": "08:53:52",
+          "working_hours": 3.2293,
+          "mobile_usage_hours": 0.0
+        }
+      ]
+    }
+  ],
+  "overall_summary": {
+    "total_known_employees": 2,
+    "total_stream_interruptions": 0,
+    "total_working_hours_all_employees": 3.9339,
+    "total_mobile_usage_hours_all_employees": 0.0
+  }
+}
