@@ -91,13 +91,17 @@ async def get_dashboard_html():
 @app.get("/api/status")
 async def get_system_status():
     """Return live system health, camera counts, hardware engine, and uptime."""
-    import torch
-    if torch.backends.mps.is_available():
-        hw_accel = "Apple Metal (MPS GPU)"
-    elif torch.cuda.is_available():
-        hw_accel = f"NVIDIA CUDA ({torch.cuda.get_device_name(0)})"
-    else:
-        hw_accel = "CPU (OpenVINO / ONNX)"
+    try:
+        import torch
+        if torch.backends.mps.is_available():
+            hw_accel = "Apple Metal (MPS GPU)"
+        elif torch.cuda.is_available():
+            hw_accel = f"NVIDIA CUDA ({torch.cuda.get_device_name(0)})"
+        else:
+            hw_accel = "CPU (OpenVINO / ONNX)"
+    except (ImportError, Exception):
+        hw_accel = "Cloud Serverless (CPU)"
+
 
     cameras = []
     active_cameras = 0

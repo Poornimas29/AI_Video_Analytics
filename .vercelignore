@@ -1,0 +1,21 @@
+# Model weights & AI artifacts (local pipeline only)
+*.pt
+*.onnx
+yolo26n*
+models/
+
+# Git and dev artifacts
+.git
+.github
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Local video captures, logs, tests
+captures/
+logs/
+scratch/
+tests/
+test_rtsp
+employee_images/
